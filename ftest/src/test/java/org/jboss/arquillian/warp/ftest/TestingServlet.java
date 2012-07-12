@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map.Entry;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,10 +54,16 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/servlet")
 @SuppressWarnings("serial")
 public class TestingServlet extends HttpServlet {
+	
+	@Inject
+	Foo foo;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
+
+    	foo.ping();
+    	
+    	resp.setContentType("text/html");
 
         PrintWriter out = resp.getWriter();
         out.write("hello there\n");

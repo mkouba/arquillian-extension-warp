@@ -25,6 +25,8 @@ import org.jboss.arquillian.core.api.Instance;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.arquillian.core.spi.ServiceLoader;
 import org.jboss.arquillian.test.spi.TestClass;
+import org.jboss.arquillian.warp.extension.cdi.WarpEvent;
+import org.jboss.arquillian.warp.extension.cdi.WarpEventObserver;
 import org.jboss.arquillian.warp.extension.servlet.BeforeServletEvent;
 import org.jboss.arquillian.warp.server.assertion.AssertionRegistry;
 import org.jboss.arquillian.warp.server.filter.WarpFilter;
@@ -39,6 +41,7 @@ import org.jboss.arquillian.warp.utils.BaseNCodec;
 import org.jboss.arquillian.warp.utils.SerializationUtils;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
@@ -92,6 +95,11 @@ public class DeploymentEnricher implements ApplicationArchiveProcessor, Auxiliar
             archive.addPackage(LifecycleEvent.class.getPackage());
             archive.addPackage(BeforeServletEvent.class.getPackage());
             archive.addPackage(ResponsePayload.class.getPackage());
+            
+            // CDI extension
+            archive.addPackage(WarpEvent.class.getPackage());
+            archive.addPackage(WarpEventObserver.class.getPackage());
+            archive.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 
             // add all required classes
             archive.addClass(ServerAssertion.class);

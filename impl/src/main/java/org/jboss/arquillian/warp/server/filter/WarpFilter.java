@@ -44,6 +44,7 @@ import org.jboss.arquillian.test.spi.TestResult;
 import org.jboss.arquillian.test.spi.event.suite.AfterSuite;
 import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
 import org.jboss.arquillian.warp.ServerAssertion;
+import org.jboss.arquillian.warp.extension.cdi.WarpEventObserver;
 import org.jboss.arquillian.warp.extension.servlet.AfterServletEvent;
 import org.jboss.arquillian.warp.extension.servlet.BeforeServletEvent;
 import org.jboss.arquillian.warp.server.assertion.AssertionRegistry;
@@ -93,6 +94,9 @@ public class WarpFilter implements Filter {
 
     @Inject
     private Instance<TestResultStore> testResultStore;
+    
+    @javax.inject.Inject
+    private WarpEventObserver warpEventObserver;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -136,6 +140,10 @@ public class WarpFilter implements Filter {
                     manager.start();
                     manager.bind(ApplicationScoped.class, Manager.class, manager);
                     manager.inject(this);
+                    
+                    // Set manager to WarpEventObserver so that it's possible to fire Arquillian events
+                    // Not sure if this is the best way
+                    warpEventObserver.setManager(manager);
 
                     req.setAttribute(WarpCommons.LIFECYCLE_MANAGER_STORE_REQUEST_ATTRIBUTE, lifecycleManagerStore);
 

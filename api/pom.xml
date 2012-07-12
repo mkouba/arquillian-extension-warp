@@ -11,6 +11,13 @@
     <artifactId>arquillian-warp-api</artifactId>
     <name>Arquillian Warp Extension: API</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
